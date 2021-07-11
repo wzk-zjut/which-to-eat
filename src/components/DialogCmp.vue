@@ -9,6 +9,13 @@
                 </div>
             </template>
         </el-dialog>
+        <el-button
+            type="danger"
+            style="float: right; margin-bottom: 10px;"
+            size="small"
+            @click="deleteAll"
+            :disabled="!foodList.length"
+        >清空</el-button>
         <el-table :data="tableData" height="500" border style="width: 100%;">
             <el-table-column type="index" label="序号" width="100"></el-table-column>
             <el-table-column prop="name" label="食物名称"></el-table-column>
@@ -28,7 +35,7 @@ import eatService from '../service/eat.service'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { ref } from '@vue/reactivity'
 
-const { tableData, deleteFood, editFood } = useInjector(eatService)
+const { tableData, deleteFood, editFood, foodList } = useInjector(eatService)
 
 const showDialog = ref(false)
 const editIndex = ref(0)
@@ -57,6 +64,17 @@ const submitEdit = () => {
     }
     editFood(editIndex.value, editInput.value)
     showDialog.value = false
+}
+
+const deleteAll = () => {
+    ElMessageBox.confirm('确定要清空食物列表吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+    }).then(() => {
+        foodList.value = []
+        ElMessage.success('清空成功！')
+    }).catch(() => { })
 }
 </script>
 
