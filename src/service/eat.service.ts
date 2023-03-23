@@ -4,10 +4,11 @@ import { getRandom } from '../common/utils'
 import useLocalStorageRef from '../common/hooks/useLocalStorageRef'
 import { ref, computed } from 'vue';
 
+const FOOD_NUM = 6
+
 export default class eatService extends Provider {
     foodList = useLocalStorageRef('wjlFood', [] as string[])
-    choosedFood = ref('')
-    isStart = ref(false)
+    choosedFoods = ref<string[]>([])
     time: any = null;
     tableData = computed(() => {
         const data: any = []
@@ -23,16 +24,6 @@ export default class eatService extends Provider {
         super();
     }
 
-    private changeNum() {
-        const length = this.foodList.value.length
-        const random = getRandom(0, length)
-        if (this.foodList.value[random] === this.choosedFood.value) {
-            this.changeNum()
-        } else {
-            this.choosedFood.value = this.foodList.value[random]
-        }
-    }
-
     addFoodList = (item: string) => {
         if (this.foodList.value.includes(item)) {
             ElMessage.warning('这样食物已经存在了哦')
@@ -43,23 +34,18 @@ export default class eatService extends Provider {
     }
 
     start = () => {
-        if (this.foodList.value.length === 1) {
-            ElMessage.warning('就一种食物还选个啥？')
+        if (this.foodList.value.length <= FOOD_NUM) {
+            this.choosedFoods.value = this.foodList.value;
             return
         }
         if (this.foodList.value.length === 0) {
             ElMessage.warning('没有食物哦，快去添加吧')
             return
         }
-        this.isStart.value = true
-        this.time = setInterval(() => {
-            this.changeNum()
-        }, 100)
-    }
-
-    end = () => {
-        this.isStart.value = false
-        clearInterval(this.time)
+        const numArr = new Array(this.foodList.value.length).fill(1).map((item, index) => index)
+        const randomArr = numArr.sort(() => Math.random() - 0.5).slice(0, FOOD_NUM)
+        const newFood = this.foodList.value.filter((item, index) => randomArr.includes(index))
+        this.choosedFoods.value = newFood
     }
 
     deleteFood = (index: number) => {

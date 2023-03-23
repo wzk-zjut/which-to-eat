@@ -3,15 +3,13 @@
     <el-dialog title="食物列表" v-model="showDialog" width="35%">
       <DialogCmp></DialogCmp>
     </el-dialog>
-    <header>今天吃什么？</header>
     <div class="input-container">
       <el-input v-model="inputFood" size="small" placeholder="请输入要添加的食物吧"></el-input>
       <el-button size="small" @click="handlerAdd">添加</el-button>
       <el-button size="small" @click="showDialog = true">浏览</el-button>
     </div>
     <Main></Main>
-    <div class="btn" v-if="!isStart" @click="start">start</div>
-    <div class="btn" v-else @click="end">stop</div>
+    <el-button @click="start">start</el-button>
   </div>
 </template>
 
@@ -23,7 +21,7 @@ import eatService from './service/eat.service'
 import Main from './components/Main.vue'
 import DialogCmp from './components/DialogCmp.vue'
 
-const { addFoodList, isStart, start, end } = useProvider(eatService)
+const { addFoodList, start } = useProvider(eatService)
 
 const inputFood = ref('')
 const showDialog = ref(false)
@@ -48,27 +46,24 @@ body,
   margin: 0;
   padding: 0;
 }
+
 .main {
-  background: url(./assets/bg.jpeg) no-repeat;
-  background-size: 100% 100%;
   text-align: center;
   padding-top: 32px;
   position: relative;
-  header {
-    color: #ff6699;
-    font-size: 66px;
-    letter-spacing: 20px;
-  }
+
   .input-container {
     position: absolute;
     top: 135px;
     left: 50px;
     width: 310px;
     display: flex;
+
     button {
       margin-left: 10px;
     }
   }
+
   .btn {
     width: 200px;
     height: 80px;
@@ -91,9 +86,11 @@ body,
   0% {
     transform: scale(1.1);
   }
+
   50% {
     transform: scale(0.8);
   }
+
   100% {
     transform: scale(1.1);
   }

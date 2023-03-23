@@ -1,6 +1,6 @@
 <template>
     <div class="main-container">
-        <div>{{ choosedFood }}</div>
+        <div v-for="item in choosedFoods">{{ item }}</div>
     </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { useInjector } from '../common/hooks/useProvider'
 import eatService from '../service/eat.service'
 
-const { choosedFood } = useInjector(eatService)
+const { choosedFoods } = useInjector(eatService)
 
 </script>
 
@@ -17,13 +17,13 @@ const { choosedFood } = useInjector(eatService)
     width: 1000px;
     margin: 50px auto;
     height: 420px;
-    background-color: rgba(255, 102, 153, 0.3);
     border-radius: 12px;
     margin-top: 160px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 120px;
-    color: #0099ff;
+    font-size: 32px;
+    color: rgb(96, 98, 102);
 }
 </style>
